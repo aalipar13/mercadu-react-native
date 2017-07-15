@@ -1979,7 +1979,7 @@ img.before-text {
   color: #54C8FF !important; }
 
 .ui.green.button, .ui.green.buttons .button {
-  background-color: #21BA45;
+  background-color: #283474;
   color: #FFF;
   text-shadow: none;
   background-image: none; }
@@ -1988,71 +1988,71 @@ img.before-text {
   box-shadow: 0 0 0 0 rgba(34, 36, 38, 0.15) inset; }
 
 .ui.green.button:hover, .ui.green.buttons .button:hover {
-  background-color: #16ab39;
+  background-color: #283474;
   color: #FFF;
   text-shadow: none; }
 
 .ui.green.button:focus, .ui.green.buttons .button:focus {
-  background-color: #0ea432;
+  background-color: #283474;
   color: #FFF;
   text-shadow: none; }
 
 .ui.green.button:active, .ui.green.buttons .button:active {
-  background-color: #198f35;
+  background-color: #283474;
   color: #FFF;
   text-shadow: none; }
 
 .ui.green.active.button, .ui.green.button .active.button:active, .ui.green.buttons .active.button, .ui.green.buttons .active.button:active {
-  background-color: #13ae38;
+  background-color: #283474;
   color: #FFF;
   text-shadow: none; }
 
 .ui.basic.green.button, .ui.basic.green.buttons .button {
-  box-shadow: 0 0 0 1px #21BA45 inset !important;
-  color: #21BA45 !important; }
+  box-shadow: 0 0 0 1px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.basic.green.button:hover, .ui.basic.green.buttons .button:hover {
   background: 0 0 !important;
-  box-shadow: 0 0 0 1px #16ab39 inset !important;
-  color: #16ab39 !important; }
+  box-shadow: 0 0 0 1px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.basic.green.button:focus, .ui.basic.green.buttons .button:focus {
   background: 0 0 !important;
-  box-shadow: 0 0 0 1px #0ea432 inset !important;
-  color: #16ab39 !important; }
+  box-shadow: 0 0 0 1px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.basic.green.active.button, .ui.basic.green.buttons .active.button {
   background: 0 0 !important;
-  box-shadow: 0 0 0 1px #13ae38 inset !important;
-  color: #198f35 !important; }
+  box-shadow: 0 0 0 1px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.basic.green.button:active, .ui.basic.green.buttons .button:active {
-  box-shadow: 0 0 0 1px #198f35 inset !important;
-  color: #198f35 !important; }
+  box-shadow: 0 0 0 1px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.buttons:not(.vertical) > .basic.green.button:not(:first-child) {
   margin-left: -1px; }
 
 .ui.inverted.green.button, .ui.inverted.green.buttons .button {
   background-color: transparent;
-  box-shadow: 0 0 0 2px #2ECC40 inset !important;
-  color: #2ECC40; }
+  box-shadow: 0 0 0 2px #283474 inset !important;
+  color: #283474; }
 
 .ui.inverted.green.button.active, .ui.inverted.green.button:active, .ui.inverted.green.button:focus, .ui.inverted.green.button:hover, .ui.inverted.green.buttons .button.active, .ui.inverted.green.buttons .button:active, .ui.inverted.green.buttons .button:focus, .ui.inverted.green.buttons .button:hover {
   box-shadow: none !important;
   color: #FFF; }
 
 .ui.inverted.green.button:hover, .ui.inverted.green.buttons .button:hover {
-  background-color: #22be34; }
+  background-color: #283474; }
 
 .ui.inverted.green.button:focus, .ui.inverted.green.buttons .button:focus {
-  background-color: #19b82b; }
+  background-color: #283474; }
 
 .ui.inverted.green.active.button, .ui.inverted.green.buttons .active.button {
-  background-color: #1fc231; }
+  background-color: #283474; }
 
 .ui.inverted.green.button:active, .ui.inverted.green.buttons .button:active {
-  background-color: #25a233; }
+  background-color: #283474; }
 
 .ui.inverted.green.basic.button, .ui.inverted.green.basic.buttons .button, .ui.inverted.green.buttons .basic.button {
   background-color: transparent;
@@ -2060,20 +2060,20 @@ img.before-text {
   color: #FFF !important; }
 
 .ui.inverted.green.basic.button:hover, .ui.inverted.green.basic.buttons .button:hover, .ui.inverted.green.buttons .basic.button:hover {
-  box-shadow: 0 0 0 2px #22be34 inset !important;
-  color: #2ECC40 !important; }
+  box-shadow: 0 0 0 2px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.inverted.green.basic.button:focus, .ui.inverted.green.basic.buttons .button:focus {
-  box-shadow: 0 0 0 2px #19b82b inset !important;
-  color: #2ECC40 !important; }
+  box-shadow: 0 0 0 2px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.inverted.green.basic.active.button, .ui.inverted.green.basic.buttons .active.button, .ui.inverted.green.buttons .basic.active.button {
-  box-shadow: 0 0 0 2px #1fc231 inset !important;
-  color: #2ECC40 !important; }
+  box-shadow: 0 0 0 2px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.inverted.green.basic.button:active, .ui.inverted.green.basic.buttons .button:active, .ui.inverted.green.buttons .basic.button:active {
-  box-shadow: 0 0 0 2px #25a233 inset !important;
-  color: #2ECC40 !important; }
+  box-shadow: 0 0 0 2px #283474 inset !important;
+  color: #283474 !important; }
 
 .ui.orange.button, .ui.orange.buttons .button {
   background-color: #F2711C;
@@ -4412,7 +4412,7 @@ img.before-text {
         .sidebar .sidebar-inner .sidebar-cart h4 {
           margin-bottom: 0; } }
       .sidebar .sidebar-inner .sidebar-cart h4 span.price {
-        color: #4CAF50; }
+        color: #f58220; }
       .sidebar .sidebar-inner .sidebar-cart .header {
         font-size: 1em !important;
         text-transform: uppercase;
@@ -4434,7 +4434,8 @@ img.before-text {
         .sidebar .sidebar-inner .sidebar-cart .extra i {
           margin-right: 0 !important; }
       .sidebar .sidebar-inner .sidebar-cart .checkout.button {
-        background-color: #EDE4DF;
+        background-color: #f58220;
+        color: #fff;
         font-weight: 700;
         -webkit-border-radius: 0 !important;
         border-radius: 0 !important;
@@ -4443,8 +4444,8 @@ img.before-text {
         border: 1px solid #EDE4DF;
         padding: .6em; }
         .sidebar .sidebar-inner .sidebar-cart .checkout.button.active {
-          background-color: #4CAF50;
-          border: 1px solid #4CAF50;
+          background-color: #f58220;
+          border: 1px solid #f58220;
           color: #fff; }
           .sidebar .sidebar-inner .sidebar-cart .checkout.button.active:hover {
             background: none;
@@ -4471,7 +4472,7 @@ img.before-text {
     letter-spacing: 1px;
     margin-bottom: 1em;
     color: #3a597e !important;
-    border-bottom: 1px solid #e2e2e2;
+    border-bottom: 1px solid #283474;
     display: block; }
     .sidebar .categories .item:hover {
       cursor: pointer;
@@ -4536,7 +4537,7 @@ img.before-text {
     .cart-details .ui.items .item .price {
       margin-top: .5em;
       display: block;
-      color: #4CAF50; }
+      color: #f58220 ; }
     .cart-details .ui.items .item button.remove {
       position: absolute;
       top: 10px;
@@ -4556,7 +4557,7 @@ img.before-text {
       color: #251A22;
       font-size: 1.9em; }
       .cart-details .total span.price {
-        color: #4CAF50; }
+        color: #f58220; }
 
 body {
   background-color: #FFFFFF;
@@ -4593,7 +4594,7 @@ header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
     header .ui.secondary.menu .item {
       text-transform: uppercase;
-      margin: .8em 0;
+      margin: 18px 10px 10px;
       letter-spacing: 2px;
       -webkit-border-radius: 0px !important;
       border-radius: 0px !important;
@@ -4610,8 +4611,10 @@ header {
             display: block; } }
       header .ui.secondary.menu .item span {
         margin-right: .3em; }
-      header .ui.secondary.menu .item.logo img {
-        width: 100px; }
+      header .ui.secondary.menu .logo img {
+        width: 180px;
+        margin-top: 5px;
+        padding: 5px; }
       header .ui.secondary.menu .item.cart-item {
         background-color: rgba(0, 0, 0, 0.05);
         color: #251A22;
@@ -4622,11 +4625,11 @@ header {
         header .ui.secondary.menu .item.cart-item span {
           font-weight: 700; }
         header .ui.secondary.menu .item.cart-item.green {
-          background-color: #4CAF50;
+          background-color: #f58220;
           color: #fff; }
         header .ui.secondary.menu .item.cart-item:hover {
           background: none;
-          border: 1px solid #4CAF50;
+          border: 1px solid #f58220;
           color: #251A22; }
 
 .home-intro .cover {

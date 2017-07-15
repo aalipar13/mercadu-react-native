@@ -7985,6 +7985,20 @@ i.icon.fa:before {
     width: 37.5% !important;
   }
 
+.ui.grid > .row > [class*="six wide"].column,
+.ui.grid > .column.row > [class*="six wide"].column,
+.ui.grid > [class*="six wide"].column,
+.ui.column.grid > [class*="six wide"].column {
+  width: 97% !important;
+}
+
+.ui.grid > .row > [class*="ten wide"].column,
+.ui.grid > .column.row > [class*="ten wide"].column,
+.ui.grid > [class*="ten wide"].column,
+.ui.column.grid > [class*="ten wide"].column {
+  width: 100% !important;
+}
+
   .ui.grid > .row > [class*="seven wide mobile"].column,
   .ui.grid > .column.row > [class*="seven wide mobile"].column,
   .ui.grid > [class*="seven wide mobile"].column,

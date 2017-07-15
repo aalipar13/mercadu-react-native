@@ -1,5 +1,7 @@
 import React from 'react'
 import moltin from '../vendor/moltin';
+
+import axios from 'axios';
 import ImageGallery from 'react-image-gallery';
 import _ from 'lodash'
 import LoadingIcon from '../../public/ripple.svg';
@@ -25,45 +27,48 @@ export default class Product extends React.Component {
 		galleryLoaded: false
 	};
 
-	componentDidMount() {
+	componentWillMount() {
 		let _this = this;
 
-		moltin.Authenticate(function() {
+		// moltin.Authenticate(function() {
+		// 	_this.setState({
+		// 		product: moltin.Product.Get(_this.state.id),
+		// 	});
+		// });
+		let id = this.props.routeParams.id;
+		axios.get(`http://dev.mercadu-web.com:8000/api/product/${id}`).then((response) => {
+			console.log(response.data.data);
 			_this.setState({
-				product: moltin.Product.Get(_this.state.id),
+				product: response.data.data
 			});
 		});
 	}
+
+	// componentDidMount() {
+	// 	let _this = this;
+    //
+	// 	// moltin.Authenticate(function() {
+	// 	// 	_this.setState({
+	// 	// 		product: moltin.Product.Get(_this.state.id),
+	// 	// 	});
+	// 	// });
+	// 	let id = this.props.routeParams.id;
+	// 	axios.get(`http://dev.mercadu-web.com:8000/api/product/${id}`).then((response) => {
+	// 		console.log(response.data.data);
+	// 		_this.setState({
+	// 				product: response.data.data
+	// 			});
+	// 	});
+	// }
 
 	render() {
 		//initialize an empty gallery array.
 		const gallery = [];
 		let _this = this;
-
-		// If we have images uploaded
-		if (this.state.product.images.length >= 1 ) {
-			let index = 0;
-
-			_.forEach(this.state.product.images, function(value) {
-				gallery[index] = {
-					original: value.url.https,
-					thumbnail: value.url.https
-				};
-				index++;
-
-				// If the gallery is completely loaded
-				if (index === _this.state.product.images.length) {
-					_this.state.galleryLoaded = true;
-				}
-			});
-		}
-
-		else {
-			gallery[0] = {
-				original: 'https://placehold.it/1000x1000',
-				thumbnail: 'https://placehold.it/100x100'
-			}
-		}
+		gallery[0] = {
+			original: 'http://dev.mercadu-web.com:8000'+this.state.product.photo,
+			thumbnail: 'http://dev.mercadu-web.com:8000'+this.state.product.photo
+		};
 
 
 		return (
@@ -83,13 +88,12 @@ export default class Product extends React.Component {
 									slideOnThumbnailHover={true}
 									items={gallery}
 									slideInterval={2000}
-									onImageLoad={this.handleImageLoad}
 								/>
 							</div>
 						</div>
 						<div className="six wide column">
 							<div className="product-details">
-								<h1>{this.state.product.title} <span className="price">{this.state.product.price.value}</span></h1>
+								<h1>{this.state.product.name} <span className="price">{'₱ '+this.state.product.regular_price}</span></h1>
 								<AddToCartButton additionalClass="fluid ui button" productId={this.state.product.id}/>
 
 								<Accordion styled defaultActiveIndex={0}>
@@ -101,24 +105,8 @@ export default class Product extends React.Component {
 										<p>
 											{this.state.product.description}
 										</p>
-									</Accordion.Content>
-									<Accordion.Title>
-										<Icon name='dropdown' />
-										Delivery
-									</Accordion.Title>
-									<Accordion.Content>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at augue et risus scelerisque finibus nec vitae velit. Praesent consectetur nibh aliquet m
-										</p>
-									</Accordion.Content>
-									<Accordion.Title>
-										<Icon name='dropdown' />
-										Components
-									</Accordion.Title>
-									<Accordion.Content>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at augue et risus scelerisque finibus nec vitae velit. Praesent consectetur nibh aliquet m
-										</p>
+										<p>Code: {this.state.product.code}</p>
+										<p>Available: {this.state.product.available}</p>
 									</Accordion.Content>
 								</Accordion>
 							</div>

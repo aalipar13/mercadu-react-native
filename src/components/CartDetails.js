@@ -4,6 +4,7 @@ import _ from 'lodash/object';
 import moltin from '../vendor/moltin';
 import LoadingIcon from '../../public/ripple.svg';
 import {Link} from 'react-router';
+import axios from 'axios';
 
 export default class CartDetails extends React.Component {
 	state = {
@@ -24,19 +25,28 @@ export default class CartDetails extends React.Component {
 
 	componentDidMount() {
 		let _this = this;
-		moltin.Authenticate(function () {
-			moltin.Cart.Contents(function(items) {
-				events.publish('CART_UPDATED', {
-					cart: items // any argument
-				});
+		// moltin.Authenticate(function () {
+		// 	moltin.Cart.Contents(function(items) {
+		// 		events.publish('CART_UPDATED', {
+		// 			cart: items // any argument
+		// 		});
+        //
+		// 		_this.setState({
+		// 			currentCart: items,
+		// 			loaded: true
+		// 		})
+		// 	}, function(error) {
+		// 		// Something went wrong...
+		// 	});
+		// });
 
-				_this.setState({
-					currentCart: items,
-					loaded: true
-				})
-			}, function(error) {
-				// Something went wrong...
+		axios.get(`http://dev.mercadu-web.com:8000/api/cart/2`).then((response) => {
+			console.log(response.data.data);
+			this.setState({
+				currentCart: response.data.data,
+				loaded:true
 			});
+
 		});
 	}
 
@@ -46,85 +56,87 @@ export default class CartDetails extends React.Component {
 			removing: true
 		});
 
-		moltin.Authenticate(function () {
-			moltin.Cart.Remove(clicked, function() {
-				moltin.Cart.Contents(function(items) {
-					events.publish('CART_UPDATED', {
-						cart: items // any argument
-					});
-
-					_this.setState({
-						currentCart: items,
-						loaded: true,
-						removing: false
-					})
-				}, function(error) {
-					// Something went wrong...
-				});
-
-				console.log('item removed', clicked)
-			}, function(error) {
-				// Something went wrong...
-			});
-		});
+		// moltin.Authenticate(function () {
+		// 	moltin.Cart.Remove(clicked, function() {
+		// 		moltin.Cart.Contents(function(items) {
+		// 			events.publish('CART_UPDATED', {
+		// 				cart: items // any argument
+		// 			});
+        //
+		// 			_this.setState({
+		// 				currentCart: items,
+		// 				loaded: true,
+		// 				removing: false
+		// 			})
+		// 		}, function(error) {
+		// 			// Something went wrong...
+		// 		});
+        //
+		// 		console.log('item removed', clicked)
+		// 	}, function(error) {
+		// 		// Something went wrong...
+		// 	});
+		// });
 	}
 
 	render() {
 		let preparedCartContent;
-		let cartContent = _.values(this.state.currentCart.contents);
-		console.log(this.state.currentCart);
+		let total = 0;
 
-		// If the cart is not empty, display the cart items
-		if (this.state.currentCart.total_items >= 1) {
-			preparedCartContent = cartContent.map((result, id) => {
-				return(
-					<div className="item" key={id}>
-						<div className="ui tiny image">
-							{
-								(result.featured_small)
-									// If we have an image set
-									? <img src={result.featured_small.data.url.https} />
+		if (this.state.currentCart.details) {
+			let cartContent = this.state.currentCart.details;
+			total = this.state.currentCart.details.length;
 
-									//else put some placeholder
-									: <img src="http://placehold.it/300x380" />
-							}
-						</div>
-						<div className="content">
-							<Link to={`/product/${result.id}`}>
-								<span className="header">{result.name} <br/>
-								<span className="price">{result.pricing.formatted.with_tax}</span>
+			// If the cart is not empty, display the cart items
+			if (total >= 1) {
+				preparedCartContent = cartContent.map((result, id) => {
+					return(
+						<div className="item" key={id}>
+							<div className="ui tiny image">
+								{
+									(result.product_photo)
+										// If we have an image set
+										? <img src={'http://dev.mercadu-web.com:8000'+result.product_photo} />
+
+										//else put some placeholder
+										: <img src="http://placehold.it/300x380" />
+								}
+							</div>
+							<div className="content">
+								<Link to={`/product/${result.id}`}>
+								<span className="header">{result.product_name} <br/>
+								<span className="price">{result.product_price}</span>
 							</span>
-							</Link>
+								</Link>
+							</div>
+
+							<button  onClick={() => { this.removeFromCart(result.id)}} className={`remove ui button ${this.state.removing ? 'disabled' : ''}`}>
+								<i className="remove outline icon"></i></button>
 						</div>
+					)
+				});
+			}
 
-						<button  onClick={() => { this.removeFromCart(result.id)}} className={`remove ui button ${this.state.removing ? 'disabled' : ''}`}>
-							<i className="remove outline icon"></i></button>
-					</div>
-				)
-			});
-		}
-
-		// If the cart is empty, display the message
-		else {
-			preparedCartContent = (
-				<span className="empty">
+			// If the cart is empty, display the message
+			else {
+				preparedCartContent = (
+					<span className="empty">
 					The Cart is empty
 				</span>
-			);
+				);
+			}
 		}
+
 
 		return (
 			<div className="cart-details">
-				<div className={`overlay ${this.state.loaded ? 'non-visible' : ''}`}>
-					<img src={LoadingIcon} alt="Loading"/>
-				</div>
 
 				<div className="ui items">
 					{preparedCartContent}
 
 					<div className="total">
 						<span className="text">TOTAL: </span>
-						<span className="price">{this.state.currentCart.totals.post_discount.formatted.with_tax}</span>
+						{/*<span className="price">{this.state.currentCart.totals.post_discount.formatted.with_tax}</span>*/}
 					</div>
 				</div>
 			</div>

@@ -1,27 +1,31 @@
 import React from 'react';
 import events from '../vendor/pub-sub';
-import moltin from '../vendor/moltin';
 import _ from 'lodash/object';
 import {Link} from 'react-router';
+import axios from 'axios';
 import LoadingIcon from '../../public/ripple.svg';
 
 export default class SidebarCart extends React.Component {
-	state = {
-		currentCart : {
-			total_items: 0,
-			totals : {
-				post_discount : {
-					formatted : {
-						with_tax: null
-					}
-				}
-			}
-		},
-		addingToCart: false
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			currentCart : {},
+			addingToCart: false
+		};
+	}
 
-	componentDidMount() {
-		let _this = this;
+	componentWillMount() {
+
+		axios.get(`http://dev.mercadu-web.com:8000/api/cart/2`).then((response) => {
+			console.log(response.data.data);
+			this.setState({
+				currentCart: response.data.data
+			});
+			events.publish('CART_UPDATED', {
+				cart: response.data.data.details // any argument
+			});
+
+		});
 
 		// Initial content load of the cart content
 		// moltin.Authenticate(function () {
@@ -40,17 +44,17 @@ export default class SidebarCart extends React.Component {
 
 		// Listen to theCART_UPDATED event. Once it happens, take the object from the
 		// published event and pass it to the currentCart state
-		events.subscribe('CART_UPDATED', function(obj) {
-			_this.setState({
-				currentCart: obj.cart
-			});
-		});
+		// events.subscribe('CART_UPDATED', function(obj) {
+		// 	this.setState({
+		// 		currentCart: obj.cart
+		// 	});
+		// });
 
 		// Listen to the ADD_TO_CART event
-		events.subscribe('ADD_TO_CART', function(obj) {
-			_this.setState({
-				addingToCart: obj.adding
-			});
+		// events.subscribe('ADD_TO_CART', function(obj) {
+		// 	this.setState({
+		// 		addingToCart: obj.adding
+		// 	});
 
 			// Once it fires, get the latest cart content data
 			// moltin.Authenticate(function () {
@@ -68,50 +72,57 @@ export default class SidebarCart extends React.Component {
 			// 		// Something went wrong...
 			// 	});
 			// });
-		});
+		// });
 	}
 
 	render() {
 		let preparedCartContent;
-		let cartContent = _.values(this.state.currentCart.contents);
+		let total = 0;
+		if (this.state.currentCart.details) {
+			let cartContent = this.state.currentCart.details;
+			total = this.state.currentCart.details.length;
+			// If the cart is not empty, display the cart items
+			if (this.state.currentCart.details.length >= 1) {
+				preparedCartContent = cartContent.map((result, id) => {
+					return(
+						<div className="item" key={id}>
+							<div className="ui tiny image">
+								{
+									(result.product_photo)
+										// If we have an image set
+										? <img src={'http://dev.mercadu-web.com:8000'+result.product_photo} />
 
-		// If the cart is not empty, display the cart items
-		if (this.state.currentCart.total_items >= 1) {
-			preparedCartContent = cartContent.map((result, id) => {
-				return(
-					<div className="item" key={id}>
-						<div className="ui tiny image">
-							{
-								(result.featured_small)
-									// If we have an image set
-									? <img src={result.featured_small.data.url.https} />
-
-									//else put some placeholder
-									: <img src="http://placehold.it/300x380" />
-							}
+										//else put some placeholder
+										: <img src="http://placehold.it/300x380" />
+								}
+							</div>
+							<div className="content">
+								<span className="header">{result.product_name} <br/><span className="price">{'₱ '+result.regular_price}</span></span>
+							</div>
 						</div>
-						<div className="content">
-							<span className="header">{result.name} <br/><span className="price">{result.pricing.formatted.with_tax}</span></span>
-						</div>
-					</div>
-				)
-			});
-		}
+					)
+				});
+			}
 
-		// If the cart is empty, display the message
-		else {
-			preparedCartContent = (
-				<span className="empty">
+			// If the cart is empty, display the message
+			else {
+				preparedCartContent = (
+					<span className="empty">
 					The Cart is empty
 				</span>
-			);
+				);
+			}
 		}
 
+
+		// let total = map(this.state.currentCart.details, ());
+
 		return (
+
 			<div className="sidebar-cart sidebar-element">
-				<h4>In Cart: <span className="price">{this.state.currentCart.totals.post_discount.formatted.with_tax}</span></h4>
+				<h4>In Cart: <span className="price">{total}</span></h4>
 				{/*// If the cart is not empty, add 'active' class to it*/}
-				<Link to="/checkout" className={`ui checkout button tiny ${this.state.currentCart.total_items >= 1 ? 'active': ''}`}>
+				<Link to="/checkout" className={`ui checkout button tiny ${total >= 1 ? 'active': ''}`}>
 					<i className="paypal icon"></i>Checkout</Link>
 				<div className="ui items">
 					{preparedCartContent}

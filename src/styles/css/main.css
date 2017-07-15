@@ -4779,11 +4779,11 @@ header {
       text-align: left;
       margin-bottom: .4em;
       margin-top: .5em;
-      color: #2e435c;
+      color: #f58220;
       font-weight: 700; }
     .product-container .product-details .button {
       height: 40px;
-      background-color: #2e435c;
+      background-color: #f58220;
       color: #fff;
       margin-bottom: 1em;
       -webkit-border-radius: 0 !important;
@@ -4791,7 +4791,7 @@ header {
       background-clip: padding-box;
       /* stops bg color from leaking outside the border: */ }
       .product-container .product-details .button:hover {
-        background-color: #3f5c7e; }
+        background-color: #f58220; }
   .product-container .ui.styled.accordion {
     -webkit-border-radius: 0 !important;
     border-radius: 0 !important;

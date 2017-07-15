@@ -3,6 +3,7 @@ import events from '../vendor/pub-sub';
 import _ from 'lodash/object';
 import moltin from '../vendor/moltin';
 import LoadingIcon from '../../public/ripple.svg';
+import map from 'lodash/map';
 import {Link} from 'react-router';
 import axios from 'axios';
 
@@ -55,6 +56,20 @@ export default class CartDetails extends React.Component {
 		this.setState({
 			removing: true
 		});
+		let data = {
+			product_id: clicked
+		}
+
+		axios.delete(`http://dev.mercadu-web.com:8000/api/cart/2/${clicked}`).then((response) => {
+			console.log(response.data.data);
+			this.setState({
+				currentCart: response.data.data,
+				loaded:true,
+				removing:false
+			});
+
+
+		});
 
 		// moltin.Authenticate(function () {
 		// 	moltin.Cart.Remove(clicked, function() {
@@ -79,9 +94,17 @@ export default class CartDetails extends React.Component {
 		// });
 	}
 
+	_getSum(arr) {
+		let sum =0;
+		for (let i = 0; i<arr.length ;i++) {
+			sum += arr[i];
+		}
+		return sum;
+	}
 	render() {
 		let preparedCartContent;
 		let total = 0;
+		let sum = this._getSum(map(this.state.currentCart.details, 'product_price'));
 
 		if (this.state.currentCart.details) {
 			let cartContent = this.state.currentCart.details;
@@ -105,12 +128,12 @@ export default class CartDetails extends React.Component {
 							<div className="content">
 								<Link to={`/product/${result.id}`}>
 								<span className="header">{result.product_name} <br/>
-								<span className="price">{result.product_price}</span>
+								<span className="price">{'₱ '+result.product_price}</span>
 							</span>
 								</Link>
 							</div>
 
-							<button  onClick={() => { this.removeFromCart(result.id)}} className={`remove ui button ${this.state.removing ? 'disabled' : ''}`}>
+							<button  onClick={() => { this.removeFromCart(result.product_id)}} className={`remove ui button ${this.state.removing ? 'disabled' : ''}`}>
 								<i className="remove outline icon"></i></button>
 						</div>
 					)
@@ -136,7 +159,7 @@ export default class CartDetails extends React.Component {
 
 					<div className="total">
 						<span className="text">TOTAL: </span>
-						{/*<span className="price">{this.state.currentCart.totals.post_discount.formatted.with_tax}</span>*/}
+						<span className="price">{'₱ '+sum}</span>
 					</div>
 				</div>
 			</div>

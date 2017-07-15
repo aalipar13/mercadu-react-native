@@ -108,12 +108,12 @@ header {
 				span {
 					font-weight: 700;
 				}
-				
+
 				&.green {
 					background-color: $color-green;
 					color: #fff;
 				}
-				
+
 				&:hover {
 					background: none;
 					border: 1px solid $color-green;
@@ -163,7 +163,7 @@ header {
 							background-color: #fff;
 							min-width: 200px;
 						}
-						
+
 						&.secondary {
 							background: none;
 							border: 1px solid rgba(255,255,255,.1);
@@ -250,7 +250,7 @@ header {
 			.content {
 				position: relative;
 				padding-right: 100px;
-				
+
 				.header {
 					text-align: left;
 					text-transform: uppercase;
@@ -258,7 +258,7 @@ header {
 						font-size: 1.1em;
 					}
 				}
-				
+
 				.sub {
 					color: grey;
 					text-align: left;
@@ -322,7 +322,7 @@ header {
 			color: #fff;
 			margin-bottom: 1em;
 			@include border-radius(0);
-			
+
 			&:hover {
 				background-color: lighten($color-primary, 10%);
 			}

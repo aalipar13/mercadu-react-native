@@ -35,6 +35,10 @@ export default class AddToCart extends React.Component {
 						adding: false
 					});
 
+					events.publish('CART_UPDATED', {
+						cart: response.data.data.details // any argument
+					});
+
 					// We use this info in the component itself
 					_this.setState({
 						adding: false

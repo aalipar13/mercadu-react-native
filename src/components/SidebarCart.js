@@ -6,20 +6,25 @@ import axios from 'axios';
 import LoadingIcon from '../../public/ripple.svg';
 
 export default class SidebarCart extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			currentCart : {},
-			addingToCart: false
-		};
-	}
-
+	state = {
+		currentCart : {
+			total_items: 0,
+			totals : {
+				post_discount : {
+					formatted : {
+						with_tax: null
+					}
+				}
+			}
+		},
+		addingToCart: false
+	};
 	componentWillMount() {
-
+		let _this = this;
 		axios.get(`http://dev.mercadu-web.com:8000/api/cart/2`).then((response) => {
 			console.log(response.data.data);
 			this.setState({
-				currentCart: response.data.data
+				currentCart: response.data.data.details
 			});
 			events.publish('CART_UPDATED', {
 				cart: response.data.data.details // any argument
@@ -44,17 +49,20 @@ export default class SidebarCart extends React.Component {
 
 		// Listen to theCART_UPDATED event. Once it happens, take the object from the
 		// published event and pass it to the currentCart state
-		// events.subscribe('CART_UPDATED', function(obj) {
-		// 	this.setState({
-		// 		currentCart: obj.cart
-		// 	});
-		// });
+		events.subscribe('CART_UPDATED', function(obj) {
+			console.log('CART_UPDATED',obj);
+			_this.setState({
+				currentCart: obj.cart
+			});
+		});
 
 		// Listen to the ADD_TO_CART event
-		// events.subscribe('ADD_TO_CART', function(obj) {
-		// 	this.setState({
-		// 		addingToCart: obj.adding
-		// 	});
+		events.subscribe('ADD_TO_CART', function(obj) {
+			console.log('ADD_TO_CART',obj);
+			_this.setState({
+				addingToCart: obj.adding
+			});
+		});
 
 			// Once it fires, get the latest cart content data
 			// moltin.Authenticate(function () {
@@ -78,11 +86,11 @@ export default class SidebarCart extends React.Component {
 	render() {
 		let preparedCartContent;
 		let total = 0;
-		if (this.state.currentCart.details) {
-			let cartContent = this.state.currentCart.details;
-			total = this.state.currentCart.details.length;
+		if (this.state.currentCart) {
+			let cartContent = this.state.currentCart;
+			total = this.state.currentCart.length;
 			// If the cart is not empty, display the cart items
-			if (this.state.currentCart.details.length >= 1) {
+			if (total >= 1) {
 				preparedCartContent = cartContent.map((result, id) => {
 					return(
 						<div className="item" key={id}>
@@ -97,7 +105,7 @@ export default class SidebarCart extends React.Component {
 								}
 							</div>
 							<div className="content">
-								<span className="header">{result.product_name} <br/><span className="price">{'₱ '+result.regular_price}</span></span>
+								<span className="header">{result.product_name} <br/><span className="price">{'₱ '+result.product_price}</span></span>
 							</div>
 						</div>
 					)

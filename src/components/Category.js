@@ -5,30 +5,39 @@ import AddToCartButton from '../components/AddToCartButton'
 
 export default class Category extends React.Component {
 	state = {
-		data:{}
+		list:{}
 	};
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			list: {}
+		}
+	}
 
 
 
 	componentDidMount() {
-		let _this = this;
+		// let _this = this;
 		// let id = this.props.routeParams.id;
 		axios.get(`http://dev.mercadu-web.com:8000/api/tag?q=${this.props.location.query.category}`).then((response) => {
-			console.log(response.data.data);
-			_this.setState({
-				data: response.data.data
+			this.setState({
+				list: response.data.data
 			});
 		});
 	}
+
 	render() {
-		// console.log(this.state.data.tags);
 		let allItems = {};
+		 let {products} = this.state.list;
 		// Create allItems function from the props we get from Home component
-		if (this.state.data.tags) {
-			allItems = this.state.data.tags.products.map((result, id) => {
+		if (products) {
+			console.log(products)
+			allItems = products.map((result, id) => {
 				return (
-					<div key={result.id} className="column product-list-element">
-						<div className="ui card" key={id+100}>
+					<div key={id} className="column product-list-element">
+						<div className="ui card" >
 							<div className="image">
 								{
 									(result.photo)
@@ -49,9 +58,8 @@ export default class Category extends React.Component {
 							</div>
 							<div className="content">
 								<span className="header">{result.name}</span>
-								<span className="sub">{result.store_name}</span>
 								<div className="price">
-									<span>{result.regular_price}</span>
+									<span>{result.sale_price}</span>
 								</div>
 							</div>
 						</div>

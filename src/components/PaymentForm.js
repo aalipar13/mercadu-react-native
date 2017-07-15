@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import moltin from '../vendor/moltin';
 import { Button, Modal } from 'semantic-ui-react';
 import {Link} from 'react-router';
+import axios from 'axios';
 import events from '../vendor/pub-sub';
 
 export default class FormExampleOnSubmit extends Component {
@@ -25,9 +26,33 @@ export default class FormExampleOnSubmit extends Component {
 		cvv: '123',
 		open: false,
 		ownerName: 'Tarik Fojnica',
+		rewardPoints: 0
 	};
 
-	close = () => this.setState({ open: false });
+	componentWillMount() {
+		// api/user/account-info/{id}
+		axios.get(`http://dev.mercadu-web.com:8000/api/user/account-info/2`).then((response) => {
+			console.log('USER',response.data.data);
+			this.setState({
+				email: response.data.data.email,
+				firstName: response.data.data.first_name,
+				lastName: response.data.data.last_name,
+				streetAddress: '2477 Friendship Lane',
+				city: 'Cebu',
+				country: 'PH',
+				zipCode: '6000',
+				phoneNumber: response.data.data.mobile,
+				cardNumber: response.data.data.bank_account_number,
+				rewardPoints : response.data.data.reward_points
+			});
+
+		});
+	}
+
+	close = () => {
+		location.reload(true);
+		this.setState({ open: false });
+	}
 
 	// Takes care of two way data binding
 	handleChange = (event) => {
@@ -42,97 +67,18 @@ export default class FormExampleOnSubmit extends Component {
 	// Triggers when the form is submitted
 	handleSubmit = (event) =>{
 		let _this = this;
+		this.setState({cartPreparing:true});
 
-		moltin.Authenticate(() => {
-			let _this = this;
+		axios.post(`http://dev.mercadu-web.com:8000/api/checkout/2`).then((response) => {
 			this.setState({
-				cartPreparing: true,
+				open: true,
+				cartPreparing: false
 			});
 
-			moltin.Cart.Complete({
-				customer: {
-					first_name: _this.state.firstName,
-					last_name:  _this.state.lastName,
-					email:      _this.state.email,
-				},
-				shipping: '1456721508712841263', // hardcoded shipping method. TODO: allow user to select a shipping method
-				gateway: 'stripe', // hardcoded payment method. TODO: allow user to select a payment method
-				bill_to: {
-					first_name: _this.state.firstName,
-					last_name:  _this.state.lastName,
-					address_1:  _this.state.streetAddress,
-					city:       _this.state.city,
-					county:     'California',
-					country:    _this.state.country,
-					postcode:   _this.state.zipCode,
-					phone:      _this.state.phoneNumber
-				},
-				ship_to: 'bill_to',
-			}, function(order) {
-				_this.setState({
-					open: true,
-					cartPreparing: false,
-					cartId: order.id
-				});
-
-			}, function(error) {
-				// Something went wrong...
-			});
 		});
+
+
 		event.preventDefault();
-	};
-
-	handlePayment = () => {
-		let _this = this;
-		this.setState({
-			processingPayment: true,
-		});
-
-		moltin.Authenticate(() => {
-			moltin.Checkout.Payment('purchase', this.state.cartId, {
-				data: {
-					first_name:   this.state.firstName,
-					last_name:    this.state.lastName,
-					number:       this.state.cardNumber,
-					expiry_month: this.state.expiryMonth,
-					expiry_year:  this.state.expiryYear,
-					cvv:          this.state.cvv
-				}
-			}, function(payment) {
-
-				// Reset the input values
-				_this.setState({
-					paymentComplete: true,
-					processingPayment: false,
-					firstName: '',
-					lastName: '',
-					cardNumber: '',
-					expiryMonth: '',
-					expiryYear: '',
-					cvv: ''
-				})
-
-				moltin.Cart.Delete(function() {
-					// Clear the cart once the payment is successful
-					//TODO: pass the cart object manually without the API call
-					moltin.Cart.Contents(function(items) {
-						events.publish('CART_UPDATED', {
-							cart: items // any argument
-						});
-
-						_this.setState({
-							currentCart: items
-						})
-					}, function(error) {
-						// Something went wrong...
-					});
-				}, function(error) {
-					// Something went wrong...
-				});
-			}, function(error) {
-				// Something went wrong...
-			});
-		});
 	};
 
 	render() {
@@ -434,7 +380,7 @@ export default class FormExampleOnSubmit extends Component {
 							</div>
 
 							<div className="field">
-								<input type="text" name="zipCode" placeholder="City"  value={this.state.zipCode}  onChange={this.handleChange}/>
+								<input type="text" name="zipCode" placeholder="Zip Code"  value={this.state.zipCode}  onChange={this.handleChange}/>
 							</div>
 						</div>
 					</div>
@@ -446,85 +392,35 @@ export default class FormExampleOnSubmit extends Component {
 					</div>
 
 					<div className="grouped fields">
-						<label htmlFor="fruit">Payment Type:</label>
+						<label htmlFor="fruit">Account Number</label>
 						<div className="field">
 							<div className="ui radio checkbox">
 								<input type="radio" name="fruit" defaultChecked className="hidden" />
-								<label>Credit Card</label>
+								<label>{this.state.cardNumber}</label>
 							</div>
 						</div>
 					</div>
+					<p>Reward Points</p>
+					<p>{this.state.rewardPoints}</p>
 
 					<button type="submit" className={`large ui button green ${this.state.cartPreparing ? 'loading' : ''}`}>Complete Your Order</button>
 				</form>
 
-				<div className={`${this.state.paymentComplete ? 'hidden' : ''}`}>
-					<Modal dimmer='blurring' open={open} onClose={this.close} size={`small`}>
-						<Modal.Header>Complete your order <br/><small>Feel free to use the provided test values</small></Modal.Header>
+				<Modal dimmer='blurring' open={open} onClose={this.close} size={`small`}>
+					<Modal.Header>Success!</Modal.Header>
 
-						<Modal.Content>
-							<Modal.Description>
-								<form className="ui form" onSubmit={this.handleSubmit}>
-									<div className="field cc-field">
-										<label>
-											<i className="credit card alternative icon"></i>
-											Card Number <br/>
-											<small className="color-green">Your payment details are secure</small>
-										</label>
+					<Modal.Content>
+						<Modal.Description>
+							<p>Your order was successful. Please check your email for more details</p>
 
-										<div className="field">
-											<input type="email" name="email" placeholder="Card Number"  value={this.state.cardNumber}  onChange={this.handleChange}/>
-										</div>
-
-										<div className="field">
-											<label>Owner Name</label>
-											<input type="text" name="phoneNumber" placeholder="Owner Name"  value={this.state.ownerName}  onChange={this.handleChange} />
-										</div>
-									</div>
-
-									<div className="field cc-field">
-										<div className="field">
-											<div className="three fields">
-												<div className="field">
-													<label>Card Expiry Month</label>
-													<input type="text" name="phoneNumber" placeholder="Expiry Month"  value={this.state.expiryMonth}  onChange={this.handleChange} />
-												</div>
-
-												<div className="field">
-													<label>Card Expiry Year</label>
-													<input type="text" name="phoneNumber" placeholder="Expiry Year"  value={this.state.expiryYear}  onChange={this.handleChange} />
-												</div>
-
-												<div className="field">
-													<label>CVV</label>
-													<input type="text" name="zipCode" placeholder="CVV"  value={this.state.cvv}  onChange={this.handleChange}/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-							</Modal.Description>
-						</Modal.Content>
-						<Modal.Actions>
-							<Button className={this.state.paymentComplete ? 'disabled' : ''} color='black' onClick={this.close}>
-								Cancel
-							</Button>
-							<Button onClick={this.handlePayment} className={`right floated ${this.state.processingPayment ? 'loading' : this.state.paymentComplete ? 'disabled' : ''}`} positive icon='checkmark' labelPosition='left' content="Order Now"/>
-						</Modal.Actions>
-
-						<div className={`order-successful ${!this.state.paymentComplete ? 'hidden' : ''}`}>
-							<div className="ui positive message">
-								<div className="header">
-									<div className="header">
-										Success
-									</div>
-									<p>Your order was successful. Please check your email for more details</p>
-									<Link className="ui button black" to="/">Back to our site</Link>
-								</div>
-							</div>
-						</div>
-					</Modal>
-				</div>
+						</Modal.Description>
+					</Modal.Content>
+					<Modal.Actions>
+						<Button color='black' onClick={this.close}>
+							OK
+						</Button>
+					</Modal.Actions>
+				</Modal>
 			</div>
 		)
 	}

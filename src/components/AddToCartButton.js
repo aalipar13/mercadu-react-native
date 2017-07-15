@@ -21,26 +21,26 @@ export default class AddToCart extends React.Component {
 			adding: true
 		});
 
-		moltin.Authenticate(function() {
-			moltin.Cart.Insert(clicked, '1', null, function(cart) {
-
-				// Inform other listeners that ADD_TO_CART event is complete
-				events.publish('ADD_TO_CART', {
-					adding: false
-				});
-
-				// We use this info in the component itself
-				_this.setState({
-					adding: false
-				})
-
-			}, function(error) {
-				_this.setState({
-					adding: false
-				})
-				console.log(error);
-			});
-		});
+		// moltin.Authenticate(function() {
+		// 	moltin.Cart.Insert(clicked, '1', null, function(cart) {
+        //
+		// 		// Inform other listeners that ADD_TO_CART event is complete
+		// 		events.publish('ADD_TO_CART', {
+		// 			adding: false
+		// 		});
+        //
+		// 		// We use this info in the component itself
+		// 		_this.setState({
+		// 			adding: false
+		// 		})
+        //
+		// 	}, function(error) {
+		// 		_this.setState({
+		// 			adding: false
+		// 		})
+		// 		console.log(error);
+		// 	});
+		// });
 	};
 
 

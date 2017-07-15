@@ -9,6 +9,14 @@ class Home extends React.Component {
 		data: [],
 		loaded: false
 	};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			data: [],
+			loaded: false
+		}
+	}
 
 	componentDidMount() {
 		let _this = this;
@@ -20,7 +28,7 @@ class Home extends React.Component {
 
 		axios.get(`http://dev.mercadu-web.com:8000/api/home`).then((response)=> {
 			console.log(response.data.data);
-			_this.setState({
+			this.setState({
 				data:response.data.data
 			})
 		});

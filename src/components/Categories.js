@@ -15,6 +15,7 @@ export default class Categories extends React.Component {
 
 	componentDidMount() {
 		axios.get(`http://dev.mercadu-web.com:8000/api/all-tag`).then((response)=> {
+			console.log('Categories',response.data.data);
 			this.setState({
 				data:response.data.data
 			})
@@ -24,10 +25,19 @@ export default class Categories extends React.Component {
 	render() {
 		return (
 			<div className="ui list categories">
-				<Link className="item" to="/category/1">Men Bags</Link>
-				<Link className="item" to="/category/1">Women Bags</Link>
-				<Link className="item" to="/category/1">Tablet Cases</Link>
-				<Link className="item" to="/category/1">Specials</Link>
+				<h3>Categories</h3>
+				{
+					this.state.data.map(item => {
+						return (
+							<Link key={item.id} className="item" to={{pathname:"/category/"+item.id.toString(),query : {category: item.slug}}} >{item.name}</Link>
+							)
+						})
+				}
+
+				{/*<Link className="item" to="/category/1">Men Bags</Link>*/}
+				{/*<Link className="item" to="/category/1">Women Bags</Link>*/}
+				{/*<Link className="item" to="/category/1">Tablet Cases</Link>*/}
+				{/*<Link className="item" to="/category/1">Specials</Link>*/}
 			</div>
 		);
 	}

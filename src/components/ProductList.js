@@ -16,9 +16,9 @@ export default class Spotlight extends React.Component {
 					<div className="ui card" key={id}>
 						<div className="image">
 							{
-								(result.featured_small)
+								(result.photo)
 									// If we have an image set
-									? <img src={result.featured_small.data.url.https} />
+									? <img src={'http://dev.mercadu-web.com:8000'+result.photo}/>
 
 									//put some placeholder
 									: <img src="http://placehold.it/300x380" />
@@ -33,10 +33,10 @@ export default class Spotlight extends React.Component {
 							</div>
 						</div>
 						<div className="content">
-							<span className="header">{result.title}</span>
-							<span className="sub">Collection Name</span>
+							<span className="header">{result.name}</span>
+							<span className="sub">{result.store_name}</span>
 							<div className="price">
-								<span>{result.price.value}</span>
+								<span>{result.regular_price}</span>
 							</div>
 						</div>
 					</div>

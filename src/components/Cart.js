@@ -6,7 +6,7 @@ export default class Cart extends React.Component {
 	state = {
 		currentCart : {
 			total_items: null
-		}
+		},
 	};
 
 	componentDidMount() {
@@ -16,7 +16,7 @@ export default class Cart extends React.Component {
 		events.subscribe('CART_UPDATED', function(obj) {
 			_this.setState({
 				currentCart: {
-					total_items: obj.cart.total_items
+					total_items: obj.length
 				}
 			})
 		});

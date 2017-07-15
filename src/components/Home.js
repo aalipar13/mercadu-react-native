@@ -9,16 +9,16 @@ class Home extends React.Component {
 		data: [],
 		loaded: false
 	};
-	constructor(props) {
-		super(props);
+	// constructor(props) {
+	// 	super(props);
+    //
+	// 	this.state = {
+	// 		data: [],
+	// 		loaded: false
+	// 	}
+	// }
 
-		this.state = {
-			data: [],
-			loaded: false
-		}
-	}
-
-	componentDidMount() {
+	componentWillMount() {
 		let _this = this;
 		// moltin.Authenticate(function() {
 		// 	_this.setState({
@@ -27,13 +27,29 @@ class Home extends React.Component {
 		// });
 
 		axios.get(`http://dev.mercadu-web.com:8000/api/home`).then((response)=> {
-			console.log(response.data.data);
-			this.setState({
-				data:response.data.data
+			console.log(response.data.data.productList);
+			_this.setState({
+				data:response.data.data.productList
 			})
 		});
-
 	}
+
+	// componentDidMount() {
+	// 	let _this = this;
+	// 	// moltin.Authenticate(function() {
+	// 	// 	_this.setState({
+	// 	// 		data: moltin.Product.List()
+	// 	// 	});
+	// 	// });
+    //
+	// 	axios.get(`http://dev.mercadu-web.com:8000/api/home`).then((response)=> {
+	// 		console.log(response.data.data.productList);
+	// 		_this.setState({
+	// 			data:response.data.data.productList
+	// 		})
+	// 	});
+    //
+	// }
 
 	render() {
 		return (
